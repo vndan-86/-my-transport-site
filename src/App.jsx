@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
 const FORMSPREE_URL = "https://formspree.io/f/xzdqzprd";
-//const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby0ZVCF2M7Q2dj8cYxcf803Lnvg2T4VdYNX9-ipQURvlutvqwMj4VfqOGrfRH8z-bsU/exec";
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxa3zlxZ_gbrW5cXPtYqPwIw7GSm0V5BgrVFbRqmsr61XBHYiod6rM1hCyWvVjGMog/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby0ZVCF2M7Q2dj8cYxcf803Lnvg2T4VdYNX9-ipQURvlutvqwMj4VfqOGrfRH8z-bsU/exec";
 const SUPABASE_URL = "https://pblyeugrcizcrrxzdkuo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBibHlldWdyY2l6Y3JyeHpka3VvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MjEzMDMsImV4cCI6MjA5NjE5NzMwM30.WmoGZPMIiRzA-hKwKjYUlaiyn4lv3-TxQc1jxEOOwtQ";
 
@@ -531,6 +530,16 @@ export default function App() {
     }).catch(()=>{});
   },[]);
 
+  // Truy cập admin qua URL: yoursite.com?admin
+  useEffect(()=>{
+    const params = new URLSearchParams(window.location.search);
+    if(params.has("admin")){
+      setAdminPrompt(true);
+      // Xóa ?admin khỏi URL để không lộ
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  },[]);
+
   const saveContent = async (newContent) => {
     setContent(newContent);
     localStorage.setItem("site_content",JSON.stringify(newContent));
@@ -539,7 +548,7 @@ export default function App() {
 
   const {theme}=content;
   const scrollTo=id=>{document.getElementById(id)?.scrollIntoView({behavior:"smooth"});setMenuOpen(false);};
-  const login=()=>{ if(adminCode==="admin123"){setShowAdmin(true);setAdminPrompt(false);setAdminCode("");}else alert("Wrong password!"); };
+  const login=()=>{ if(adminCode==="July2021@"){setShowAdmin(true);setAdminPrompt(false);setAdminCode("");}else alert("Wrong password!"); };
 
   const BLUE="#003580";
   const navH=64;
@@ -575,7 +584,6 @@ export default function App() {
               <button onClick={login} style={{ flex:1,padding:"10px",background:BLUE,color:"#fff",border:"none",borderRadius:8,fontWeight:700,cursor:"pointer" }}>Login</button>
               <button onClick={()=>setAdminPrompt(false)} style={{ flex:1,padding:"10px",background:"#f4f7fc",border:"1px solid #d0d7e3",borderRadius:8,cursor:"pointer" }}>Cancel</button>
             </div>
-            <p style={{ fontSize:12,color:"#8899bb",marginTop:10,textAlign:"center" }}>Default: <code>admin123</code></p>
           </div>
         </div>
       )}
@@ -611,7 +619,6 @@ export default function App() {
               WhatsApp
             </a>
             <button onClick={()=>setShowQuote(true)} style={{ padding:"8px 18px",background:BLUE,color:"#fff",border:"none",borderRadius:8,fontWeight:700,cursor:"pointer",fontSize:14 }}>Get Quote</button>
-            <button onClick={()=>setAdminPrompt(true)} style={{ padding:"6px 10px",background:"transparent",border:"1px solid #d0d7e3",color:"#8899bb",borderRadius:6,cursor:"pointer",fontSize:12 }}>Admin</button>
           </div>
         )}
 
@@ -641,7 +648,6 @@ export default function App() {
               WhatsApp: {content.company.phone}
             </a>
             <button onClick={()=>{setShowQuote(true);setMenuOpen(false);}} style={{ padding:"12px",background:BLUE,color:"#fff",border:"none",borderRadius:8,fontWeight:700,cursor:"pointer",fontSize:15 }}>Get Free Quote</button>
-            <button onClick={()=>{setAdminPrompt(true);setMenuOpen(false);}} style={{ padding:"10px",background:"transparent",border:"1px solid #d0d7e3",borderRadius:8,color:"#8899bb",cursor:"pointer",fontSize:13 }}>⚙️ Admin</button>
           </div>
         </div>
       )}
