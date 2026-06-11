@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const FORMSPREE_URL = "https://formspree.io/f/xzdqzprd";
 //const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby0ZVCF2M7Q2dj8cYxcf803Lnvg2T4VdYNX9-ipQURvlutvqwMj4VfqOGrfRH8z-bsU/exec";
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/library/d/1NLqF-9iSoT-sDo7I9UwgfhkoI5F2bIlTkVwQLTJUCYaiDDTDqVuYDukd/1";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzlcw3h2MsdyttgtwoFwzOJrf1zPPWzxWj1AX1MKX6qyjvguZBxpX7ECG0UzmILABM/exec";
 const SUPABASE_URL = "https://pblyeugrcizcrrxzdkuo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBibHlldWdyY2l6Y3JyeHpka3VvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MjEzMDMsImV4cCI6MjA5NjE5NzMwM30.WmoGZPMIiRzA-hKwKjYUlaiyn4lv3-TxQc1jxEOOwtQ";
 
