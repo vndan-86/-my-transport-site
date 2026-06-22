@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
 const FORMSPREE_URL = "https://formspree.io/f/xzdqzprd";
-//const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby0ZVCF2M7Q2dj8cYxcf803Lnvg2T4VdYNX9-ipQURvlutvqwMj4VfqOGrfRH8z-bsU/exec";
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzlcw3h2MsdyttgtwoFwzOJrf1zPPWzxWj1AX1MKX6qyjvguZBxpX7ECG0UzmILABM/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby0ZVCF2M7Q2dj8cYxcf803Lnvg2T4VdYNX9-ipQURvlutvqwMj4VfqOGrfRH8z-bsU/exec";
 const SUPABASE_URL = "https://pblyeugrcizcrrxzdkuo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBibHlldWdyY2l6Y3JyeHpka3VvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MjEzMDMsImV4cCI6MjA5NjE5NzMwM30.WmoGZPMIiRzA-hKwKjYUlaiyn4lv3-TxQc1jxEOOwtQ";
 
@@ -15,7 +14,19 @@ async function loadFromSupabase() {
     const res = await sbFetch("/rest/v1/site_content?id=eq.1&select=content");
     const data = await res.json();
     const c = data?.[0]?.content;
-    if (c && typeof c === "object" && c.company) return c;
+    if (c && typeof c === "object" && c.company) {
+      // Merge với DEFAULT_CONTENT để đảm bảo các field mới luôn có
+      return { ...DEFAULT_CONTENT, ...c,
+        pricing: c.pricing || DEFAULT_CONTENT.pricing,
+        services: c.services || DEFAULT_CONTENT.services,
+        company: { ...DEFAULT_CONTENT.company, ...c.company },
+        hero: { ...DEFAULT_CONTENT.hero, ...c.hero },
+        about: { ...DEFAULT_CONTENT.about, ...c.about },
+        contact: { ...DEFAULT_CONTENT.contact, ...c.contact },
+        footer: { ...DEFAULT_CONTENT.footer, ...c.footer },
+        theme: { ...DEFAULT_CONTENT.theme, ...c.theme },
+      };
+    }
   } catch {}
   return null;
 }
@@ -107,7 +118,22 @@ const DEFAULT_CONTENT = {
 };
 
 function loadContent() {
-  try { const s = localStorage.getItem("site_content"); if(s) return JSON.parse(s); } catch {}
+  try {
+    const s = localStorage.getItem("site_content");
+    if (s) {
+      const c = JSON.parse(s);
+      return { ...DEFAULT_CONTENT, ...c,
+        pricing: c.pricing || DEFAULT_CONTENT.pricing,
+        services: c.services || DEFAULT_CONTENT.services,
+        company: { ...DEFAULT_CONTENT.company, ...c.company },
+        hero: { ...DEFAULT_CONTENT.hero, ...c.hero },
+        about: { ...DEFAULT_CONTENT.about, ...c.about },
+        contact: { ...DEFAULT_CONTENT.contact, ...c.contact },
+        footer: { ...DEFAULT_CONTENT.footer, ...c.footer },
+        theme: { ...DEFAULT_CONTENT.theme, ...c.theme },
+      };
+    }
+  } catch {}
   return DEFAULT_CONTENT;
 }
 
