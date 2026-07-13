@@ -434,6 +434,114 @@ function QuoteModal({ onClose, theme }) {
   );
 }
 
+// ── COOKIE BANNER ──
+function CookieBanner() {
+  const [visible, setVisible] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [prefs, setPrefs] = useState({ necessary:true, analytics:true, marketing:false });
+
+  useEffect(()=>{
+    const consent = localStorage.getItem("cookie_consent");
+    if(!consent) setVisible(true);
+  },[]);
+
+  const acceptAll = () => {
+    localStorage.setItem("cookie_consent", JSON.stringify({ necessary:true, analytics:true, marketing:true, date: new Date().toISOString() }));
+    setVisible(false);
+  };
+  const rejectAll = () => {
+    localStorage.setItem("cookie_consent", JSON.stringify({ necessary:true, analytics:false, marketing:false, date: new Date().toISOString() }));
+    setVisible(false);
+  };
+  const savePrefs = () => {
+    localStorage.setItem("cookie_consent", JSON.stringify({ ...prefs, date: new Date().toISOString() }));
+    setVisible(false);
+  };
+
+  if(!visible) return null;
+
+  const BLUE = "#003580";
+  const toggle = (key) => setPrefs(p=>({...p,[key]:!p[key]}));
+
+  return (
+    <div style={{ position:"fixed", bottom:0, left:0, right:0, zIndex:9000, padding:"0 16px 16px", fontFamily:"'Segoe UI',sans-serif" }}>
+      <div style={{ maxWidth:900, margin:"0 auto", background:"#fff", borderRadius:16, boxShadow:"0 -4px 40px rgba(0,53,128,0.18)", border:"1px solid #e0e7f0", overflow:"hidden" }}>
+
+        {/* Main banner */}
+        {!showDetail ? (
+          <div style={{ padding:"24px 28px", display:"flex", flexDirection:"column", gap:16 }}>
+            <div style={{ display:"flex", alignItems:"flex-start", gap:16 }}>
+              <div style={{ fontSize:32, flexShrink:0 }}>🍪</div>
+              <div>
+                <h3 style={{ margin:"0 0 6px", color:BLUE, fontSize:17, fontWeight:800 }}>We use cookies</h3>
+                <p style={{ margin:0, color:"#5a6a8a", fontSize:14, lineHeight:1.6 }}>
+                  We use cookies to enhance your browsing experience, analyze site traffic and personalize content.
+                  By clicking <strong>"Accept All"</strong>, you consent to our use of cookies.
+                  You can also <button onClick={()=>setShowDetail(true)} style={{ background:"none",border:"none",color:BLUE,cursor:"pointer",fontWeight:700,fontSize:14,padding:0,textDecoration:"underline" }}>customize your preferences</button>.
+                </p>
+              </div>
+            </div>
+            <div style={{ display:"flex", gap:10, flexWrap:"wrap", justifyContent:"flex-end" }}>
+              <button onClick={rejectAll} style={{ padding:"9px 20px", background:"#f4f7fc", border:"1px solid #d0d7e3", borderRadius:8, color:"#5a6a8a", fontWeight:600, fontSize:14, cursor:"pointer" }}>
+                Reject All
+              </button>
+              <button onClick={()=>setShowDetail(true)} style={{ padding:"9px 20px", background:"#f4f7fc", border:`1px solid ${BLUE}`, borderRadius:8, color:BLUE, fontWeight:600, fontSize:14, cursor:"pointer" }}>
+                Customize
+              </button>
+              <button onClick={acceptAll} style={{ padding:"9px 24px", background:BLUE, border:"none", borderRadius:8, color:"#fff", fontWeight:700, fontSize:14, cursor:"pointer" }}>
+                Accept All ✓
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Detail panel */
+          <div style={{ padding:"24px 28px" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
+              <h3 style={{ margin:0, color:BLUE, fontSize:17, fontWeight:800 }}>🍪 Cookie Preferences</h3>
+              <button onClick={()=>setShowDetail(false)} style={{ background:"none", border:"none", color:"#8899bb", cursor:"pointer", fontSize:20 }}>✕</button>
+            </div>
+
+            {[
+              { key:"necessary", label:"Strictly Necessary", desc:"Essential for the website to function. Cannot be disabled.", locked:true },
+              { key:"analytics", label:"Analytics & Performance", desc:"Help us understand how visitors interact with our website (e.g. Google Analytics).", locked:false },
+              { key:"marketing", label:"Marketing & Targeting", desc:"Used to deliver personalized ads and track effectiveness of campaigns.", locked:false },
+            ].map(c=>(
+              <div key={c.key} style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"16px 0", borderBottom:"1px solid #f0f4ff" }}>
+                <div style={{ flex:1, paddingRight:20 }}>
+                  <div style={{ fontWeight:700, color:"#1a2540", fontSize:14, marginBottom:4 }}>{c.label}</div>
+                  <div style={{ fontSize:13, color:"#8899bb", lineHeight:1.5 }}>{c.desc}</div>
+                </div>
+                {c.locked ? (
+                  <div style={{ background:"#e8f0fe", color:BLUE, fontSize:12, fontWeight:700, padding:"4px 10px", borderRadius:99, whiteSpace:"nowrap", marginTop:2 }}>Always On</div>
+                ) : (
+                  <div onClick={()=>toggle(c.key)} style={{
+                    width:44, height:24, borderRadius:12, cursor:"pointer", flexShrink:0, marginTop:2,
+                    background:prefs[c.key]?BLUE:"#d0d7e3", position:"relative", transition:"background 0.2s",
+                  }}>
+                    <div style={{
+                      position:"absolute", top:3, left:prefs[c.key]?22:3, width:18, height:18,
+                      borderRadius:"50%", background:"#fff", transition:"left 0.2s", boxShadow:"0 1px 4px rgba(0,0,0,0.2)",
+                    }} />
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <div style={{ marginTop:20, display:"flex", gap:10, justifyContent:"flex-end", flexWrap:"wrap" }}>
+              <button onClick={rejectAll} style={{ padding:"9px 20px", background:"#f4f7fc", border:"1px solid #d0d7e3", borderRadius:8, color:"#5a6a8a", fontWeight:600, fontSize:14, cursor:"pointer" }}>Reject All</button>
+              <button onClick={acceptAll} style={{ padding:"9px 20px", background:"#f4f7fc", border:`1px solid ${BLUE}`, borderRadius:8, color:BLUE, fontWeight:600, fontSize:14, cursor:"pointer" }}>Accept All</button>
+              <button onClick={savePrefs} style={{ padding:"9px 24px", background:BLUE, border:"none", borderRadius:8, color:"#fff", fontWeight:700, fontSize:14, cursor:"pointer" }}>Save Preferences ✓</button>
+            </div>
+            <p style={{ fontSize:11, color:"#aab8d4", marginTop:14, marginBottom:0 }}>
+              For more information, please read our <a href="#" style={{ color:BLUE }}>Privacy Policy</a>.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── CONTACT SECTION ──
 function ContactSection({ content, BLUE, isMobile }) {
   const [form, setForm] = useState({ name:"", email:"", phone:"", service:"", message:"" });
@@ -617,6 +725,7 @@ export default function App() {
 
       {showAdmin&&<AdminPanel content={content} onSave={saveContent} onClose={()=>setShowAdmin(false)} />}
       {showQuote&&<QuoteModal onClose={()=>setShowQuote(false)} theme={theme} />}
+      <CookieBanner />
 
       {/* NAVBAR */}
       <nav style={{ position:"fixed",top:0,width:"100%",zIndex:100,background:"#fff",boxShadow:"0 2px 20px rgba(0,53,128,0.12)",height:navH,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 24px" }}>
