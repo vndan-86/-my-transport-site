@@ -59,8 +59,8 @@ const DEFAULT_CONTENT = {
     bgImage: "/hinh_nen.jpg",
   },
   services: [
-    { id:1, icon:"🚛", title:"Full Moving Service", desc:"All-In-One Package — Everything included: packing, loading, transport, unloading and furniture placement. Starting from 47€/hour." },
-    { id:2, icon:"📦", title:"Standard Moving Service", desc:"Professional loading, transport and unloading of your belongings. Fast and reliable. Starting from 36€/hour." },
+    { id:1, icon:"🚛", title:"Full Moving Service", desc:"All-In-One Package — Everything included: packing, loading, transport, unloading and furniture placement. Starting from 50€/hour." },
+    { id:2, icon:"📦", title:"Standard Moving Service", desc:"Professional loading, transport and unloading of your belongings. Fast and reliable. Starting from 38€/hour." },
     { id:3, icon:"🧹", title:"Move-In & Move-Out Cleaning", desc:"Deep cleaning for your old or new home. Leave it spotless. Starting from 33€/hour per cleaner." },
     { id:4, icon:"🔧", title:"Furniture Assembly & Installation", desc:"Expert assembly and installation of all types of furniture — IKEA, flat-pack and more. Starting from 24€/hour per installer." },
     { id:5, icon:"➕", title:"Additional Options", desc:"Need something extra? Packing materials, storage, special item handling — we customize the service to fit your needs." },
@@ -411,7 +411,7 @@ function QuoteModal({ onClose, theme }) {
             <input placeholder="Phone Number *" type="tel" value={form.phone} onChange={set("phone")} style={iS} />
             <select value={form.service} onChange={set("service")} style={iS}>
               <option value="">Select Service Type...</option>
-              <option>Full Moving Service (All-In-One) — 47€/hour</option>
+              <option>Full Moving Service (All-In-One) — 50€/hour</option>
               <option>Standard Moving Service — 36€/hour</option>
               <option>Move-In & Move-Out Cleaning — 33€/hour per cleaner</option>
               <option>Furniture Assembly & Installation — 24€/hour per installer</option>
