@@ -412,7 +412,7 @@ function QuoteModal({ onClose, theme }) {
             <select value={form.service} onChange={set("service")} style={iS}>
               <option value="">Select Service Type...</option>
               <option>Full Moving Service (All-In-One) — 50€/hour</option>
-              <option>Standard Moving Service — 36€/hour</option>
+              <option>Standard Moving Service — 38€/hour</option>
               <option>Move-In & Move-Out Cleaning — 33€/hour per cleaner</option>
               <option>Furniture Assembly & Installation — 24€/hour per installer</option>
               <option>Additional Options (Custom)</option>
