@@ -367,7 +367,7 @@ function AdminPanel({ content, onSave, onClose }) {
 }
 
 // ── QUOTE MODAL ──
-function QuoteModal({ onClose, theme }) {
+function QuoteModal({ onClose, theme, services = [] }) {
   const [submitted,setSubmitted]=useState(false);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState("");
@@ -409,14 +409,18 @@ function QuoteModal({ onClose, theme }) {
             <input placeholder="Full Name *" value={form.name} onChange={set("name")} style={iS} />
             <input placeholder="Email Address *" type="email" value={form.email} onChange={set("email")} style={iS} />
             <input placeholder="Phone Number *" type="tel" value={form.phone} onChange={set("phone")} style={iS} />
-            <select value={form.service} onChange={set("service")} style={iS}>
-              <option value="">Select Service Type...</option>
-              <option>Full Moving Service (All-In-One) — 50€/hour</option>
-              <option>Standard Moving Service — 38€/hour</option>
-              <option>Move-In & Move-Out Cleaning — 33€/hour per cleaner</option>
-              <option>Furniture Assembly & Installation — 24€/hour per installer</option>
-              <option>Additional Options (Custom)</option>
-            </select>
+           <select value={form.service} onChange={set("service")} style={iS}>
+  <option value="">Select Service Type...</option>
+
+  {services.map((service, index) => (
+    <option
+      key={service.id || index}
+      value={service.title}
+    >
+      {service.icon} {service.title}
+    </option>
+  ))}
+</select>
             <div style={{ display:"flex",gap:10 }}>
               <input placeholder="Moving From (City) *" value={form.from} onChange={set("from")} style={{...iS,flex:1}} />
               <input placeholder="Moving To (City) *" value={form.to} onChange={set("to")} style={{...iS,flex:1}} />
@@ -724,7 +728,13 @@ export default function App() {
       )}
 
       {showAdmin&&<AdminPanel content={content} onSave={saveContent} onClose={()=>setShowAdmin(false)} />}
-      {showQuote&&<QuoteModal onClose={()=>setShowQuote(false)} theme={theme} />}
+      {showQuote && (
+  <QuoteModal
+    onClose={() => setShowQuote(false)}
+    theme={theme}
+    services={content.services}
+  />
+)}
       <CookieBanner />
 
       {/* NAVBAR */}
