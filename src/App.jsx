@@ -631,14 +631,40 @@ function ContactSection({ content, BLUE, isMobile }) {
             <input placeholder="Full Name *" value={form.name} onChange={set("name")} style={iS} />
             <input placeholder="Email Address *" type="email" value={form.email} onChange={set("email")} style={iS} />
             <input placeholder="Phone Number *" type="tel" value={form.phone} onChange={set("phone")} style={iS} />
-            <select value={form.service} onChange={set("service")} style={{ width:"100%",padding:"11px 13px",background:"#1a3a6b",border:"1px solid rgba(255,255,255,0.3)",borderRadius:8,color:form.service?"#fff":"rgba(255,255,255,0.6)",fontSize:14,marginBottom:12,boxSizing:"border-box",cursor:"pointer",appearance:"auto" }}>
-              <option value="" style={{ background:"#1a3a6b",color:"rgba(255,255,255,0.6)" }}>Select Service...</option>
-              <option value="Full Moving Service (All-In-One) — 47€/hour" style={{ background:"#1a3a6b",color:"#fff" }}>Full Moving Service (All-In-One) — 47€/hour</option>
-              <option value="Standard Moving Service — 36€/hour" style={{ background:"#1a3a6b",color:"#fff" }}>Standard Moving Service — 36€/hour</option>
-              <option value="Move-In & Move-Out Cleaning — 33€/hour per cleaner" style={{ background:"#1a3a6b",color:"#fff" }}>Move-In & Move-Out Cleaning — 33€/hour per cleaner</option>
-              <option value="Furniture Assembly & Installation — 24€/hour per installer" style={{ background:"#1a3a6b",color:"#fff" }}>Furniture Assembly & Installation — 24€/hour per installer</option>
-              <option value="Additional Options (Custom)" style={{ background:"#1a3a6b",color:"#fff" }}>Additional Options (Custom)</option>
-            </select>
+            <select
+  value={form.service}
+  onChange={set("service")}
+  style={{
+    width:"100%",
+    padding:"11px 13px",
+    background:"#1a3a6b",
+    border:"1px solid rgba(255,255,255,0.3)",
+    borderRadius:8,
+    color:form.service ? "#fff" : "rgba(255,255,255,0.6)",
+    fontSize:14,
+    marginBottom:12,
+    boxSizing:"border-box",
+    cursor:"pointer",
+    appearance:"auto"
+  }}
+>
+  <option
+    value=""
+    style={{ background:"#1a3a6b", color:"rgba(255,255,255,0.6)" }}
+  >
+    Select Service...
+  </option>
+
+  {content.services.map((service, index) => (
+    <option
+      key={service.id || index}
+      value={service.title}
+      style={{ background:"#1a3a6b", color:"#fff" }}
+    >
+      {service.icon} {service.title}
+    </option>
+  ))}
+</select>
             <textarea placeholder="Tell us about your move..." rows={3} value={form.message} onChange={set("message")} style={{...iS, resize:"vertical"}} />
             <button onClick={submit} disabled={loading} style={{ width:"100%", padding:"14px", background:loading?"rgba(255,255,255,0.5)":"#fff", color:BLUE, border:"none", borderRadius:10, fontWeight:800, fontSize:16, cursor:loading?"not-allowed":"pointer", transition:"all 0.2s" }}>
               {loading ? "⏳ Sending..." : "Send Request →"}
